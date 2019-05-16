@@ -2,29 +2,62 @@
   input boxes
   buttons
 */
+/* Parallax test */
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  background: #0C0032;
+  font-size: 24px;
+  padding: 25px;
+  color: #fff;
+}
+
+.container h1 {
+  margin-bottom: 2%;
+}
+
+.parallax {
+  background: url('images/sky-test.jpg') no-repeat center;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 500px;
+}
 
 /* HEADER */
 
 body{
   margin: 0;
   padding: 0;
-  background-color: black;
+  background-color: #0C0032;
 }
 
 #header {
   display: flex;
-  justify-content: flex-start;
-  background-color: #3D3D3D;
+  justify-content: space-between;
+  background-color: black;
   width: 100%;
   height: 15%;
 }
 
 .header-class {
-  width: 20%;
+  width: 50%;
+  height: inherit;
+}
+
+/* .header-img {
+  width: 50%;
+  height: inherit;
+} */
+
+.header-img h3 {
+  margin-top: 10%;
+  margin-right: 40px;
 }
 
 .header-h2 {
   margin-left: 10%;
+  margin-top: 10px;
   color: #fff;
   font-family: 'Montserrat', sans-serif;
 }
@@ -36,6 +69,36 @@ h1 {
   text-align: center;
   font-family: 'Montserrat', sans-serif;
 }
+
+/* BANNER */
+#banner {
+  width: 100%;
+  height: 400px;
+  background-color: #0C0032;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-class{
+  display: flex;
+  justify-content: center;
+  margin: auto auto;
+}
+
+/* THINGAMUJIN */
+
+.carousel {
+  width: 910px;
+  margin: 0 auto;
+}
+
+/* #thingamuhjing {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  height: 500px;
+} */
 
 /* ADD SHOWS BUTTON */
 
@@ -82,16 +145,16 @@ h1 {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 1000px;
+  height: 500px;
+  visibility: hidden;
 }
 
 .show-list-container-class{
-  display: flex;
-  background-color: gray;
+  background-color: #fff;
   border-radius: 2%;
   margin-top: 3%;
-  width: 25%;
-  height: 50%;
+  width: 50%;
+  height: auto;
   overflow: auto;
 }
 
@@ -106,8 +169,17 @@ li {
   display: flex;
   flex-flow: wrap;
   height: auto;
-  width: auto;
+  width: 100%;
   display: block;
-  /* background-color: green; */
-  margin: 10px 0;
+  padding: 0 10%;
+  margin: 2% 0;
+}
+
+.clear-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+#clearButton {
+  align-self: center;
 }
