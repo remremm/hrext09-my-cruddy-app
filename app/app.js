@@ -46,43 +46,25 @@ var keyExists = function(key) {
   return currentValue !== null;
 };
 
-var createShowObj = function(watched, total){
+var createShowObj = function(name, watched, total){
   var showObj = new Object();
+  showObj.name = name;
   showObj.watched = watched;
   showObj.total = total;
   return JSON.stringify(showObj);
 };
 
 $(document).ready(function() {
-  // Interact CDN => move output container on mouse click/drag
-  interact('.show-list-container-class')
-    .draggable({
-      ineratia: true,
-      modifiers: [
-        interact.modifiers.restrict({
-          endOnly: true,
-          elementRect: {top: 0, left: 0, bottom: 1, right: 1}
-        })
-      ],
-      autoScroll: true,
-      onmove: dragMoveListener,
-    });
-
-    function dragMoveListener(event){
-      var target = event.target,
-        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-        target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-        target.setAttribute('data-x', x);
-        target.setAttribute('data-y', y);
-    }
-
-    window.dragMoveListener = dragMoveListener;
-
-  var itemsList = getItem('showList') ? JSON.parse(getItems('showList')) : [];
-
+  var innerButton = `<span class="pull-right"><button id="clearSelf" class="btn btn-sm btn-primary">Del</button></span>`;
+  var itemsList = getItem('items') ? JSON.parse(getItem('items')) : [];
   createItem('items', JSON.stringify(itemsList));
+  const data = JSON.parse(getItem('items'));
+
+  if(data){
+    data.forEach(function(x){
+      $('.show-list').append(`<div class="inner-content"><li class="list-group-item">${x.name}:<br> Watched: ${x.watched} Total: ${x.total}<br>${innerButton}</li></div>`);
+    });
+  }
 
   // Functions for adding numbers to drop down lists
     $(function(){
@@ -105,17 +87,16 @@ $(document).ready(function() {
     var showName = $("#showName").val();
     var episodesWatched = $("#episodesWatched").val();
     var totalEpisodes = $('#totalEpisodes').val();
-    var showEpisodes = createShowObj(episodesWatched, totalEpisodes);
-    itemsList.push(JSON.stringify(showEpisodes));
-    var innerButton = `<span class="pull-right"><button id="clearButton" class="btn btn-lg btn-primary">Del</button></span>`;
+    var showEpisodes = createShowObj(showName, episodesWatched, totalEpisodes);
     if (keyExists(showName)) {
       //current key exists, do something error-handle-y
     } else {
       createItem(showName, showEpisodes);
+      var test = JSON.parse(getItem('items'));
+      test.push(JSON.parse(showEpisodes));
+      updateItem('items', JSON.stringify(test));
       var parsedEpisodes = JSON.parse(showEpisodes);
-      // setItem(showName, JSON.stringify(itemsList));
-      // var data = JSON.parse(itemsList);
-      $('.show-list').prepend(`<div class="inner-content"><li class="${showName} list-group-item">${showName}:<br> Watched: ${parsedEpisodes.watched} Total: ${parsedEpisodes.total}<br>${innerButton}</li></div>`);
+      $('.show-list').prepend(`<div class="inner-content"><li class="list-group-item">${showName}:<br> Watched: ${parsedEpisodes.watched} Total: ${parsedEpisodes.total}<br>${innerButton}</li></div>`);
     }
     $('#show-list-container').css('visibility', 'visible');
   });
@@ -124,25 +105,27 @@ $(document).ready(function() {
   $('#updateButton').click(function(event) {
     event.preventDefault();
 
-    var showName = $("#showName").val();
-    var episodesWatched = $("#episodesWatched").val();
-    var totalEpisodes = $('#totalEpisodes').val();
-    var showEpisodes = createShowObj(episodesWatched, totalEpisodes);
-    var innerButton = `<span class="pull-right"><button id="clearButton" class="btn btn-lg btn-primary">Del</button></span>`;
-    if (keyExists(showName)) {
-      updateItem(showName, showEpisodes);
+    var showName = $("#showName").val(); // set show name
+    var episodesWatched = $("#episodesWatched").val(); // set episode num
+    var totalEpisodes = $('#totalEpisodes').val(); // set total episode num
+    var showEpisodes = createShowObj(showName, episodesWatched, totalEpisodes); // create object of name, ep num, total num
+    if (keyExists(showName)) { // if key of localStorage exists
+      updateItem(showName, showEpisodes); // update localStorage of item with obj
+      // var test = JSON.parse(getItem('items')); // var array = parsed items array (full of objects)
+      // test.push(JSON.parse(showEpisodes)); //
+      updateItem('items', JSON.stringify(test));
       var parsedEpisodes = JSON.parse(showEpisodes);
-      $(`.${showName}`).html(`<div class="inner-content><li class="${showName}" list-group-item>${showName}:<br> Watched: ${parsedEpisodes.watched} Total: ${parsedEpisodes.total}<br>${innerButton}</li></div>`);
+      $(`.${showName}`).html(`<div class="inner-content><li class="list-group-item">${showName}:<br> Watched: ${parsedEpisodes.watched} Total: ${parsedEpisodes.total}<br>${innerButton}</li></div>`);
     } else {
       //current key doesnt exist, do stuff
     }
   });
 
   // on click, clears local storage
-  // need to add code to clear the div where everything is stored
+  // on click, clears all list items
   $('#clearButton').click(function(event){
     event.preventDefault();
-
+    $('li').remove();
     clearEverything();
   });
 });
