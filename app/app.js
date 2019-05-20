@@ -54,15 +54,24 @@ var createShowObj = function(name, watched, total){
   return JSON.stringify(showObj);
 };
 
+var createButtonLeft = function(){
+  return `<span class="pull-left"><button type="button" id="minusNum">-</button></span>`;
+}
+
+var createButtonRight = function(){
+  return `<span class="pull-right"><button type="button" id="plusNum">+</button></span>`;
+}
+
 $(document).ready(function() {
-  var innerButton = `<span class="pull-right"><button id="clearSelf" class="btn btn-sm btn-primary">Del</button></span>`;
   var itemsList = getItem('items') ? JSON.parse(getItem('items')) : [];
   createItem('items', JSON.stringify(itemsList));
   const data = JSON.parse(getItem('items'));
 
   if(data){
     data.forEach(function(x){
-      $('.show-list').append(`<div class="inner-content"><li class="list-group-item">${x.name}:<br> Watched: ${x.watched} Total: ${x.total}<br>${innerButton}</li></div>`);
+      var paraEpisodes = `<span class="show-num">${x.watched}</span>`;
+      var paraTotal = `<span class="total-num">${x.total}</span>`
+      $('.show-list').prepend(`<div class="inner-content"><li class="list-group-item">${x.name}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>${createButtonLeft()}${createButtonRight()}</li></div>`);
     });
   }
 
@@ -96,7 +105,9 @@ $(document).ready(function() {
       test.push(JSON.parse(showEpisodes));
       updateItem('items', JSON.stringify(test));
       var parsedEpisodes = JSON.parse(showEpisodes);
-      $('.show-list').prepend(`<div class="inner-content"><li class="list-group-item">${showName}:<br> Watched: ${parsedEpisodes.watched} Total: ${parsedEpisodes.total}<br>${innerButton}</li></div>`);
+      var paraEpisodes = `<span class="show-num">${parsedEpisodes.watched}</span>`;
+      var paraTotal = `<span class="total-num">${parsedEpisodes.total}</span>`
+      $('.show-list').prepend(`<div class="inner-content"><li class="list-group-item">${showName}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>${createButtonLeft()}${createButtonRight()}</li></div>`);
     }
     $('#show-list-container').css('visibility', 'visible');
   });
@@ -115,7 +126,9 @@ $(document).ready(function() {
       // test.push(JSON.parse(showEpisodes)); //
       updateItem('items', JSON.stringify(test));
       var parsedEpisodes = JSON.parse(showEpisodes);
-      $(`.${showName}`).html(`<div class="inner-content><li class="list-group-item">${showName}:<br> Watched: ${parsedEpisodes.watched} Total: ${parsedEpisodes.total}<br>${innerButton}</li></div>`);
+      var paraEpisodes = `<span class="show-num">${parsedEpisodes.watched}</span>`;
+      var paraTotal = `<span class="total-num">${parsedEpisodes.total}</span>`
+      $(`.${showName}`).html(`<div class="inner-content><li class="list-group-item">${showName}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>${createButtonLeft()}${createButtonRight()}</li></div>`);
     } else {
       //current key doesnt exist, do stuff
     }
@@ -128,4 +141,11 @@ $(document).ready(function() {
     $('li').remove();
     clearEverything();
   });
+
+  // $('#plusNum').click(function(){
+  //   var count = parseInt($('.show-num').val());
+  //   count++;
+  //   $(this).parent().parent().text(count.toString());
+  // });
+
 });
