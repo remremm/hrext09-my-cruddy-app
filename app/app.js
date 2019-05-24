@@ -63,17 +63,18 @@ var createButtonRight = function(){
 }
 
 $(document).ready(function() {
+  // document global variables
   var itemsList = getItem('items') ? JSON.parse(getItem('items')) : [];
   createItem('items', JSON.stringify(itemsList));
   const data = JSON.parse(getItem('items'));
 
+  // Keep data on page on refresh
   if(data){
     data.forEach(function(x){
       var paraEpisodes = `<span class="show-num ${x.name}">${x.watched}</span>`;
       var paraTotal = `<span class="total-num ${x.name}Total">${x.total}</span>`
-      // $('.show-list').prepend(`<div class="inner-content"><li class="list-group-item">${x.name}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br></li>${createButtonLeft()}${createButtonRight()}</div>`);
 
-      $('.show-list').prepend(`<li class="list-group-item ${x.name}">${x.name}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>${createButtonLeft()}${createButtonRight()}</li>`);
+      $('.show-list').prepend(`<li class="list-group-item ${x.name}"><span class="li-header">${x.name}</span>:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br></li>`);
     });
   }
 
@@ -91,7 +92,6 @@ $(document).ready(function() {
       }
     });
 
-  // on create click, adds shows with episodes watched/total
   $('#createButton').click(function(event) {
     event.preventDefault();
 
@@ -110,8 +110,9 @@ $(document).ready(function() {
       var paraEpisodes = `<span class="show-num ${showName}">${parsedEpisodes.watched}</span>`;
       var paraTotal = `<span class="total-num ${showName}Total">${parsedEpisodes.total}</span>`
       // $('.show-list').prepend(`<div class="inner-content"><li class="list-group-item">${showName}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>${createButtonLeft()}${createButtonRight()}</li></div>`);
-      $('.show-list').prepend(`<li class="list-group-item ${showName}">${showName}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>${createButtonLeft()}${createButtonRight()}</li>`);
+      $('.show-list').prepend(`<li class="list-group-item ${showName}"><span class="li-header">${showName}</span>:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br></li>`);
     }
+    $('#showName').val('');
     $('#show-list-container').css('visibility', 'visible');
   });
 
@@ -136,9 +137,7 @@ $(document).ready(function() {
       var parsedEpisodes = JSON.parse(showEpisodes);
       var paraEpisodes = `<span class="show-num ${showName}">${parsedEpisodes.watched}</span>`;
       var paraTotal = `<span class="total-num ${showName}.total">${parsedEpisodes.total}</span>`;
-      $(`.${showName}`).html(`${showName}:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>${createButtonLeft()}${createButtonRight()}`);
-      // $('.show-num').text(parsedEpisodes.watched);
-      console.log(parsedEpisodes.watched + ' ' + parsedEpisodes.total);
+      $(`.${showName}`).html(`<span class="li-header">${showName}</span>:<br> Watched: ${paraEpisodes} Total: ${paraTotal}<br>`);
     } else {
       //current key doesnt exist, do stuff
     }
@@ -151,23 +150,4 @@ $(document).ready(function() {
     $('li').remove();
     clearEverything();
   });
-
-  $('#plusNum').each(function(){
-    $(this).click(function(){
-      // var count = parseInt($('.show-num').val());
-      // count++;
-      console.log($(this).parentsUntil('ul').text());
-    })
-  })
-
-  $('#minusNum').each(function(){
-    $(this).click(function(){
-      // var count = parseInt($('.show-num').val());
-      // count++;
-      console.log($(this).parentsUntil('ul').text());
-    });
-  });
-
-
-
 });
